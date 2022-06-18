@@ -7,7 +7,7 @@ public class IdentityDataContext : DbContext
 {
     public IdentityDataContext(DbContextOptions<IdentityDataContext> options) : base(options) {}
 
-    public DbSet<User?> Users => Set<User>();
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
