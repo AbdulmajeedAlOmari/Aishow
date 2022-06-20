@@ -18,20 +18,6 @@ public class UsersController : ControllerBase
         _userService = userService;
     }
 
-    [HttpPost("login", Name = "authenticate")]
-    public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest model)
-    {
-        var response = await _userService.Authenticate(model);
-        return Ok(response);
-    }
-
-    [HttpPost("register", Name = "register")]
-    public async Task<IActionResult> Register([FromBody] RegisterRequest model)
-    {
-        var response = await _userService.Register(model);
-        return Ok(response);
-    }
-
     [Authorize]
     [HttpGet(Name = "get all")]
     public async Task<IActionResult> GetAll()

@@ -12,7 +12,7 @@ namespace Identity.API.Infrastructure.Services;
 
 public interface IUserService
 {
-    Task<AuthenticateResponse> Authenticate(AuthenticateRequest model);
+    Task<AuthenticateResponse> Login(AuthenticateRequest model);
     Task<AuthenticateResponse> Register(RegisterRequest model);
     Task<List<User>> GetAll();
     User GetById(int id);
@@ -41,7 +41,7 @@ public class UserService : IUserService
         _context = context;
     }
 
-    public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model)
+    public async Task<AuthenticateResponse> Login(AuthenticateRequest model)
     {
         var user = await _userRepository.GetUserWithRolesByUsername(model.Username);
 
