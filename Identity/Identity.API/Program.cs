@@ -2,6 +2,7 @@ using Identity.API.Infrastructure.Data;
 using Identity.API.Infrastructure.Helpers;
 using Identity.API.Infrastructure.Middlewares;
 using Identity.API.Infrastructure.Repositories;
+using Identity.API.Infrastructure.Seeders;
 using Identity.API.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,7 @@ var builder = WebApplication.CreateBuilder(args);
     // configure DI for application services
     services.AddScoped<IUserService, UserService>();
     services.AddScoped<IUserRepository, UserRepository>();
+    services.AddScoped<IRoleRepository, RoleRepository>();
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
@@ -36,6 +38,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 var app = builder.Build();
+
+// Allow timestamps to be saved in PostresSql
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+// Seed database with initial data
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetService<IdentityDataContext>();
+        DataSeeder.Seed(context);
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

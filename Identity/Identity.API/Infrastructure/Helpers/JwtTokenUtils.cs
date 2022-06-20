@@ -13,17 +13,26 @@ public class JwtTokenUtils
         // generate token that is valid for 7 days
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(secret);
+
+        // Create claims
+        List<Claim> claims = new List<Claim>();
+        claims.Add(new Claim("id", user.UserId.ToString()));
+        claims.Add(new Claim(ClaimTypes.Name, user.Username));
+        claims.Add(new Claim(ClaimTypes.Email, user.Email));
+        foreach (var userRole in user.Roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, userRole.CodeName));
+        }
+
+        // Generate token with claims
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[]
-            {
-                new Claim("id", user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Email, user.Email),
-            }),
+            Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddDays(7),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
+
+        // Return token as string/text
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }

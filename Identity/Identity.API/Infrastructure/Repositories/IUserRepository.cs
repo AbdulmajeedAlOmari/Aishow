@@ -8,7 +8,7 @@ public interface IUserRepository
 {
     Task<User> CreateUser(User user);
     Task<User?> GetUser(int userId);
-    Task<User?> GetUserByUsername(string username);
+    Task<User?> GetUserWithRolesByUsername(string username);
     Task<List<User>> GetUsers();
 }
 
@@ -24,18 +24,20 @@ public class UserRepository : IUserRepository
     public async Task<User> CreateUser(User user)
     {
         await _context.Users.AddAsync(user);
-        await _context.SaveChangesAsync();
         return user;
     }
 
     public async Task<User?> GetUser(int userId)
     {
-        return await _context.Users.Where(user => user!.Id == userId).FirstOrDefaultAsync();
+        return await _context.Users.Where(user => user!.UserId == userId).FirstOrDefaultAsync();
     }
 
-    public async Task<User?> GetUserByUsername(string username)
+    public async Task<User?> GetUserWithRolesByUsername(string username)
     {
-        return await _context.Users.Where(user => user!.Username == username).FirstOrDefaultAsync();
+        return await _context.Users
+            .Include(x => x.Roles)
+            .Where(user => user!.Username == username)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<List<User>> GetUsers()
