@@ -1,4 +1,5 @@
-﻿using Identity.API.Infrastructure.Models;
+﻿using Identity.API.Infrastructure.Attributes;
+using Identity.API.Infrastructure.Models;
 using Identity.API.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,5 +30,13 @@ public class AuthController : ControllerBase
     {
         var response = await _userService.Register(model);
         return Ok(response);
+    }
+
+    [Authorize]
+    [HttpPost("validate", Name = "validate")]
+    public IActionResult ValidateToken()
+    {
+        // Validate token in [Authorize] attribute and return Ok() if valid. 
+        return Ok();
     }
 }
