@@ -1,11 +1,11 @@
 ﻿using System.Text;
-using Common.Exceptions;
+using Common.API.Exceptions;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace Common.Clients.Http;
+namespace Common.API.Clients.Http;
 
 public class HttpClientBase
 {

@@ -1,9 +1,8 @@
-﻿using System.Net;
-using Common.Clients.Interfaces;
+﻿using Common.API.Clients.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Common.Clients.Http;
+namespace Common.API.Clients.Http;
 
 public class IdentityClient : HttpClientBase, IIdentityClient
 {

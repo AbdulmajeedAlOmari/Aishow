@@ -1,4 +1,4 @@
-﻿namespace Common.Clients.Interfaces;
+﻿namespace Common.API.Clients.Interfaces;
 
 public interface IServiceClient : IIdentityClient
 {

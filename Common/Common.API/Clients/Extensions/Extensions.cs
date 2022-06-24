@@ -1,9 +1,9 @@
-﻿using Common.Exceptions;
+﻿using Common.API.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Sentry;
 using Sentry.AspNetCore;
 
-namespace Common.Clients.Extensions;
+namespace Common.API.Clients.Extensions;
 
 public static class Extensions
 {

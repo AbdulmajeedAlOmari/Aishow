@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Common.Enums;
+namespace Common.API.Enums;
 
 public enum LanguageEnum
 {

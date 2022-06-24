@@ -1,8 +1,8 @@
 ﻿using System.Net;
-using Common.Enums;
+using Common.API.Enums;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Common.Exceptions;
+namespace Common.API.Exceptions;
 
     public class ErrorResponse
     {

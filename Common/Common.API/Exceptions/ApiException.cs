@@ -1,4 +1,4 @@
-﻿namespace Common.Exceptions;
+﻿namespace Common.API.Exceptions;
 
 public class ApiException : Exception
 {

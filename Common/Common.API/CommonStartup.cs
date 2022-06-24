@@ -1,9 +1,9 @@
-﻿using Common.Clients.Http;
+﻿using Common.API;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-[assembly: HostingStartup(typeof(Common.CommonStartup))]
-namespace Common
+[assembly: HostingStartup(typeof(CommonStartup))]
+namespace Common.API
 {
     public class CommonStartup : IHostingStartup
     {

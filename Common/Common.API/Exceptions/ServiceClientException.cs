@@ -1,7 +1,7 @@
 ﻿using EasyNetQ.SystemMessages;
 using Newtonsoft.Json;
 
-namespace Common.Exceptions;
+namespace Common.API.Exceptions;
 
 public class ServiceClientException : Exception
 {
