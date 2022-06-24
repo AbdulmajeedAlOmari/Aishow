@@ -23,4 +23,13 @@ public static class Extensions
             configureOptions?.Invoke(options);
         });
     }
+
+    public static IWebHostBuilder UseAishowSentry(
+        this IWebHostBuilder builder)
+    {
+        return builder.UseSentry(configureOptions: (context, options) =>
+        {
+            options.AddExceptionFilterForType<ApiException>();
+        });
+    }
 }
