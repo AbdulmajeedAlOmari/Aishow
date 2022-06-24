@@ -26,4 +26,7 @@
       <Folder Include="Migrations" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Common\Common.API\Common.API.csproj" />
+    </ItemGroup>
 </Project>

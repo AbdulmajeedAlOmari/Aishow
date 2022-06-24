@@ -1,3 +1,8 @@
+using System.Reflection;
+using Common.API.Clients.Extensions;
+using Common.API.Clients.Interfaces;
+using Common.API.Filters;
+using Common.API.MessageBroker;
 using Identity.API.Infrastructure.Data;
 using Identity.API.Infrastructure.Helpers;
 using Identity.API.Infrastructure.Middlewares;
@@ -5,14 +10,45 @@ using Identity.API.Infrastructure.Repositories;
 using Identity.API.Infrastructure.Seeders;
 using Identity.API.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using Sentry;
+using Sentry.Reflection;
 
-var builder = WebApplication.CreateBuilder(args);
+// Initialize application builder
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    ApplicationName = typeof(Program).Assembly.GetNameAndVersion().Name,
+    ContentRootPath = Directory.GetCurrentDirectory(),
+});
+
+// Sentry integration
+builder.WebHost.UseAishowSentry();
+
+// Configuration files mapping
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
+        "appsettings.Common.json"), optional: false)
+    .AddJsonFile(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
+        $"appsettings.Common.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json"), optional: false)
+    .AddJsonFile("appsettings.json", optional: true)
+    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+    .AddEnvironmentVariables();
+
+// Logging configurations
+builder.Logging
+    .AddJsonConsole()
+    .AddSentry();
 
 // add services to DI container
 {
     var services = builder.Services;
     services.AddCors();
-    services.AddControllers();
+    services.AddControllers(options =>
+    {
+        // Add exception handler filter to all controllers
+        options.Filters.Add(typeof(HttpCommonExceptionFilter));
+    });
 
     // Register Database Context
     services.AddDbContext<IdentityDataContext>(options =>
@@ -34,10 +70,18 @@ var builder = WebApplication.CreateBuilder(args);
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
+    // Common package setup
+    services.Configure<MessageBrokerOptions>(builder.Configuration.GetSection("MessageBroker"));
+    services.AddSingleton<IMessageBroker, MessageBroker>();
+    services.AddHttpClient<System.Net.Http.HttpClient>();
+    services.AddSingleton<IServiceClient, Common.API.Clients.Http.HttpClient>();
 }
 
 
 var app = builder.Build();
+
+app.UseSentryTracing();
 
 // Allow timestamps to be saved in PostresSql
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -68,9 +112,6 @@ if (app.Environment.IsDevelopment())
 
     app.UseHttpsRedirection();
 
-    // global error handler
-    app.UseMiddleware<ErrorHandlerMiddleware>();
-
     // custom jwt auth middleware
     app.UseMiddleware<JwtMiddleware>();
 
@@ -78,5 +119,7 @@ if (app.Environment.IsDevelopment())
 
     app.MapControllers();
 }
+
+SentrySdk.CaptureMessage("Identity Service Started");
 
 app.Run();
