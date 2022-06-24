@@ -1,4 +1,5 @@
-﻿using Common.API.Exceptions;
+﻿using System.Runtime.Serialization;
+using Common.API.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Sentry;
 using Sentry.AspNetCore;
@@ -7,6 +8,18 @@ namespace Common.API.Clients.Extensions;
 
 public static class Extensions
 {
+    public static T ToEnum<T>(this string str)
+    {
+        Type enumType = typeof(T);
+        foreach (string name in Enum.GetNames(enumType))
+        {
+            EnumMemberAttribute enumMemberAttribute = ((EnumMemberAttribute[])enumType.GetField(name).GetCustomAttributes(typeof(EnumMemberAttribute), true)).Single();
+            if (enumMemberAttribute.Value == str) return (T)Enum.Parse(enumType, name);
+        }
+
+        return default;
+    }
+
     /// <summary>
     /// Uses Aishow Customized Sentry integration.
     /// </summary>
