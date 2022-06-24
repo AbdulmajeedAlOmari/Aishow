@@ -30,6 +30,7 @@ public static class Extensions
         return builder.UseSentry(configureOptions: (context, options) =>
         {
             options.AddExceptionFilterForType<ApiException>();
+            options.SampleRate = 1;
         });
     }
 }
