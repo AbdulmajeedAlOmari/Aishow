@@ -1,4 +1,5 @@
 ﻿using Common.API.Clients.Interfaces;
+using Common.API.Models.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -12,8 +13,8 @@ public class IdentityClient : HttpClientBase, IIdentityClient
         System.Net.Http.HttpClient client
     ) : base(configuration, logger, client, "BaseUrls:Identity") { }
 
-    public async Task ValidateToken()
+    public async Task<CommonUserDto> GetUser()
     {
-        await GetAsync<string>("/api/auth/validate");
+        return await GetAsync<CommonUserDto>("/api/auth/user");
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Common.API.Clients.Interfaces;
+using Common.API.Models.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -13,5 +14,5 @@ public class HttpClient : IServiceClient
         _identityClient = new IdentityClient(configuration, logger, client);
     }
 
-    public Task ValidateToken() => _identityClient.ValidateToken();
+    public Task<CommonUserDto> GetUser() => _identityClient.GetUser();
 }

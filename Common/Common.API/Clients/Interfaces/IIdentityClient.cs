@@ -1,6 +1,8 @@
-﻿namespace Common.API.Clients.Interfaces;
+﻿using Common.API.Models.Entities;
+
+namespace Common.API.Clients.Interfaces;
 
 public interface IIdentityClient
 {
-    Task ValidateToken();
+    Task<CommonUserDto> GetUser();
 }
