@@ -16,7 +16,7 @@ public class JwtTokenUtils
 
         // Create claims
         List<Claim> claims = new List<Claim>();
-        claims.Add(new Claim("id", user.UserId.ToString()));
+        claims.Add(new Claim("UserId", user.UserId.ToString()));
         claims.Add(new Claim(ClaimTypes.Name, user.Username));
         claims.Add(new Claim(ClaimTypes.Email, user.Email));
         foreach (var userRole in user.Roles)

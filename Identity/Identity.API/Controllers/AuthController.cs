@@ -1,13 +1,17 @@
-﻿using Identity.API.Infrastructure.Attributes;
+﻿using Common.API.Helpers;
+using Common.API.Models.Entities;
+using Identity.API.Infrastructure.Attributes;
+using Identity.API.Infrastructure.Entities;
 using Identity.API.Infrastructure.Models;
 using Identity.API.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace Identity.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+public class AuthController : CommonControllerBase
 {
     private readonly IUserService _userService;
     private readonly ILogger<AuthController> _logger;
@@ -18,14 +22,14 @@ public class AuthController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost("login", Name = "login")]
+    [HttpPost("login", Name = "Login")]
     public async Task<IActionResult> Login([FromBody] AuthenticateRequest model)
     {
         var response = await _userService.Login(model);
         return Ok(response);
     }
 
-    [HttpPost("register", Name = "register")]
+    [HttpPost("register", Name = "Register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest model)
     {
         var response = await _userService.Register(model);
@@ -33,10 +37,15 @@ public class AuthController : ControllerBase
     }
 
     [Authorize]
-    [HttpPost("validate", Name = "validate")]
-    public IActionResult ValidateToken()
+    [HttpGet("user", Name = "Get User Information")]
+    public async Task<IActionResult> GetUserInformation()
     {
-        // Validate token in [Authorize] attribute and return Ok() if valid. 
-        return Ok();
+        // First, validate token in [Authorize] attribute
+
+        // Then, we get user details from user service using their Token
+        CommonUserDto user = await _userService.GetUserFromToken();
+
+        // Return user details
+        return Ok(user);
     }
 }

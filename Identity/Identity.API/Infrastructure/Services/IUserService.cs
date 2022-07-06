@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common.API.Models.Entities;
 using Identity.API.Infrastructure.Data;
 using Identity.API.Infrastructure.Entities;
 using Identity.API.Infrastructure.Enums;
@@ -15,30 +16,27 @@ public interface IUserService
     Task<AuthenticateResponse> Login(AuthenticateRequest model);
     Task<AuthenticateResponse> Register(RegisterRequest model);
     Task<List<User>> GetAll();
-    User GetById(int id);
+    Task<CommonUserDto> GetById(int id);
+    Task<CommonUserDto> GetUserFromToken();
 }
 
 public class UserService : IUserService
 {
-    // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-    private List<User> _users = new List<User>
-    {
-        new User { UserId = 1, FirstName = "Test", LastName = "User", Username = "test", Email = "test@email.com", HashedPassword = BCrypt.Net.BCrypt.HashPassword("test") }
-    };
-
     private readonly AppSettings _appSettings;
     private readonly IMapper _mapper;
     private readonly IUserRepository _userRepository;
     private readonly IRoleRepository _roleRepository;
     private readonly IdentityDataContext _context;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public UserService(IOptions<AppSettings> appSettings, IMapper mapper, IUserRepository userRepository, IRoleRepository roleRepository, IdentityDataContext context)
+    public UserService(IOptions<AppSettings> appSettings, IMapper mapper, IUserRepository userRepository, IRoleRepository roleRepository, IdentityDataContext context, IHttpContextAccessor httpContextAccessor)
     {
         _appSettings = appSettings.Value;
         _mapper = mapper;
         _userRepository = userRepository;
         _roleRepository = roleRepository;
         _context = context;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<AuthenticateResponse> Login(AuthenticateRequest model)
@@ -69,8 +67,8 @@ public class UserService : IUserService
     public async Task<AuthenticateResponse> Register(RegisterRequest model)
     {
         // Validate user does not exist
-        if (_users.Any(x => x.Username == model.Username))
-            throw AppExceptionEnum.UserNotFound;
+        // if (_users.Any(x => x.Username == model.Username))
+        //     throw AppExceptionEnum.UserNotFound;
 
         // Map model to new user object
         var user = _mapper.Map<User>(model);
@@ -100,8 +98,22 @@ public class UserService : IUserService
         return await _userRepository.GetUsers();
     }
 
-    public User GetById(int id)
+    public async Task<CommonUserDto> GetById(int id)
     {
-        return _users.FirstOrDefault(x => x.UserId == id);
+        // Fetch user object from HTTP context
+        User user = await _userRepository.GetUser(id);
+
+        // Map user to common user dto object
+        var userDto = _mapper.Map<CommonUserDto>(user);
+
+        return userDto;
+    }
+
+    public async Task<CommonUserDto> GetUserFromToken()
+    {
+        // Fetch user object from HTTP context
+        CommonUserDto user = (CommonUserDto) _httpContextAccessor.HttpContext?.Items["User"]!;
+
+        return user;
     }
 }

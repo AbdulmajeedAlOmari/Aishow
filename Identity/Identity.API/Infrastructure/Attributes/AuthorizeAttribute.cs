@@ -1,4 +1,5 @@
-﻿using Identity.API.Infrastructure.Entities;
+﻿using Common.API.Models.Entities;
+using Identity.API.Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -15,7 +16,8 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
         if (allowAnonymous)
             return;
 
-        var user = (User)context.HttpContext.Items["User"];
+        var user = (CommonUserDto) context.HttpContext.Items["User"];
+
         if (user == null)
         {
             // not logged in

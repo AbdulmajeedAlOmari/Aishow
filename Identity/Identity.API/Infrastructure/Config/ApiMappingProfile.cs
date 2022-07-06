@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common.API.Models.Entities;
 using Identity.API.Infrastructure.Entities;
 using Identity.API.Infrastructure.Models;
 
@@ -9,5 +10,7 @@ public class ApiMappingProfile : Profile
     public ApiMappingProfile()
     {
         CreateMap<RegisterRequest, User>();
+        CreateMap<User, CommonUserDto>();
+        CreateMap<Role, CommonRoleDto>();
     }
 }
