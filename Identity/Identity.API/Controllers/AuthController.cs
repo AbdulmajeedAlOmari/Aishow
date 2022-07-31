@@ -1,11 +1,9 @@
 ﻿using Common.API.Helpers;
 using Common.API.Models.Entities;
 using Identity.API.Infrastructure.Attributes;
-using Identity.API.Infrastructure.Entities;
 using Identity.API.Infrastructure.Models;
 using Identity.API.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace Identity.API.Controllers;
 
