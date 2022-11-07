@@ -62,6 +62,9 @@ builder.Logging
     // configure strongly typed settings object
     services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
+    // Declare HttpContextAccessor
+    services.AddHttpContextAccessor();
+
     // configure DI for application services
     services.AddScoped<IUserService, UserService>();
     services.AddScoped<IUserRepository, UserRepository>();
