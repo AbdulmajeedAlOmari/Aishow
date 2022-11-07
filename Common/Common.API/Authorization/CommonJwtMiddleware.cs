@@ -1,4 +1,5 @@
-﻿using Common.API.Clients.Interfaces;
+﻿using Common.API.Clients.Http;
+using Common.API.Clients.Interfaces;
 using Common.API.Helpers;
 using Common.API.Models.Entities;
 using Microsoft.AspNetCore.Http;
@@ -9,12 +10,12 @@ namespace Common.API.Authorization;
 public class CommonJwtMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly IServiceClient _serviceClient;
+    private readonly Common.API.Clients.Http.HttpClient _serviceClient;
 
-    public CommonJwtMiddleware(RequestDelegate next, IServiceClient serviceClient)
+    public CommonJwtMiddleware(RequestDelegate next, Common.API.Clients.Http.HttpClient httpClient)
     {
         _next = next;
-        _serviceClient = serviceClient;
+        _serviceClient = httpClient;
     }
 
     public async Task Invoke(HttpContext context)
@@ -29,7 +30,7 @@ public class CommonJwtMiddleware
         }
 
         // Attempt fetching user details in case exists
-        CommonUserDto userDto = await _serviceClient.GetUser();
+        CommonUserDto userDto = await _serviceClient.Identities.GetUser();
 
         // Attach user information to context on successful jwt validation
         context.Items["User"] = userDto;
