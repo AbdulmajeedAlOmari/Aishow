@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  aishow-identity:
+      image: aishow-identity
+      container_name: aishow-identity
+      environment:
+        ConnectionStrings__DefaultConnection: 'User ID=postgresql;Password=postgresql;Host=aishow-database;Port=5432;Database=identity'
+        MessageBroker__ConnectionString: 'amqp://guest:guest@aishow-rabbitmq:5672'
+        ASPNETCORE_ENVIRONMENT : 'Development'
+      build:
+        context: ./Identity.API
+        dockerfile: Dockerfile
+      depends_on:
+        - aishow-database
+      ports:
+          - 5000:80
+  aishow-database:
+    image: postgres
+    container_name: aishow-database
+    environment:
+      POSTGRES_PASSWORD: postgresql
+      POSTGRES_USER: postgresql
+    ports:
+      - 5432:5432
+  aishow-rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: aishow-rabbitmq
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
