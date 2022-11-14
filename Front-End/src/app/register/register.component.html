@@ -1,0 +1,79 @@
+<!-- Button to open the modal -->
+<button
+  class="w-100 btn btn-lg btn-primary"
+  (click)="openModel('id01')"
+>
+  Sign Up
+</button>
+
+<!-- The Modal (contains the Sign Up form) -->
+<div id="id01" class="modal" *ngIf="!inSubmission">
+  <span
+    (click)="closeModel('id01')"
+    class="close"
+    title="Close Modal"
+    >&times;</span
+  >
+
+  <form
+    class="modal-content"
+    [formGroup]="registerForm"
+    (ngSubmit)="register($event)"
+  >
+
+  <app-alert *ngIf="showAlert" [color]="alertColor">
+    {{alertMsg}}
+  </app-alert>
+  
+    <div class="container">
+      <h1>Sign Up</h1>
+      <hr />
+      <div class="text-align">
+        <label for="firstName"><b> First Name:</b> </label>
+        <app-input
+          [control]="registerForm.controls.firstName"
+          placeholder="Enter your name"
+        ></app-input>
+
+        <label for="last-name"> <b>Last Name:</b></label>
+        <app-input
+          [control]="registerForm.controls.lastName"
+          placeholder="Enter your last name"
+        ></app-input>
+
+        <label for="user-name"> <b>Username:</b></label>
+        <app-input
+          [control]="registerForm.controls.username"
+          placeholder="Enter your username"
+        ></app-input>
+
+        <label for="email"> <b>Email:</b></label>
+        <app-input
+          [control]="registerForm.controls.email"
+          placeholder="Enter your email"
+        ></app-input>
+
+        <label for="psw"><b>Password</b></label>
+        <app-input
+          [control]="registerForm.controls.password"
+          placeholder="Enter your password"
+        ></app-input>
+      </div>
+
+      <p>
+        Already have an account 
+        <a routerLink="/login" (click)="switchToLoginModel('id01')">login</a>.
+            </p>
+
+      <div class="clearfix">
+        <button
+          [disabled]="registerForm.invalid || inSubmission"
+          type="submit"
+          class="signup w-100 btn btn-lg btn-primary"
+        >
+          Sign Up
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

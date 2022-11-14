@@ -1,0 +1,40 @@
+<input
+  [type]=type
+  [formControl]="control"
+  class="form-control"
+  [placeholder]="placeholder" [mask]="format"
+  [dropSpecialCharacters]="false"
+/>
+<ng-container *ngIf="control.touched && control.dirty">
+  <p
+    class="text-danger"
+    *ngIf="control.errors?.['required']"
+  >
+    Field is required
+  </p>
+  <p class="text-danger" *ngIf="control.errors?.['minlength']">
+    The value you inputted is {{ control.errors?.['minlength'].actualLength }} It
+    must be {{ control.errors?.['minlength'].requiredLength }}
+  </p>
+  <p class="text-danger" *ngIf="control.errors?.['email']">
+    You must enterd valid email
+  </p>
+  <p class="text-danger" *ngIf="control.errors?.['min']">
+    Age must not be yonger than {{control.errors?.['min'].min}} 
+  </p>
+
+  <p class="text-danger" *ngIf="control.errors?.['max']">
+    
+    Age must not be older than {{control.errors?.['max'].max}}
+  </p>
+  <p class="text-danger" *ngIf="control.errors?.['pattern']">
+    Enter Valid password
+  </p>
+
+  <p class="text-danger" *ngIf="control.errors?.['noMatch']">
+    Password do not match
+  </p>
+  <p class="text-danger" *ngIf="control.errors?.['emailTaken']">
+    Email taken. Please try another email
+  </p>
+</ng-container>

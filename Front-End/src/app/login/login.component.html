@@ -1,0 +1,55 @@
+<!-- The Modal (contains the Sign Up form) -->
+<div id="id02" class="modal" *ngIf="!inSubmission">
+  <span
+   (click)="closeModel('id02')"
+    class="close"
+    title="Close Modal"
+    >&times;</span
+  >
+
+  <form
+    class="modal-content"
+    [formGroup]="loginForm"
+    (ngSubmit)="login($event)"
+  >
+
+  <app-alert *ngIf="showAlert" [color]="alertColor">
+    {{alertMsg}}
+  </app-alert>
+  
+    <div class="container">
+      <h1>Login</h1>
+      <hr />
+      <div class="text-align">
+      
+
+        <label for="user-name"> <b>Username:</b></label>
+        <app-input
+          placeholder="Enter your username"
+          [control]="loginForm.controls.username"
+        ></app-input>
+
+        <label for="psw"><b>Password</b></label>
+        <app-input
+          placeholder="Enter your password"
+          [control]="loginForm.controls.password"
+        ></app-input>
+      </div>
+
+      <p>
+        do not have an account 
+        <a routerLink="/register" (click)="switchToRegisterModel('id02')">register</a>.
+      </p>
+
+      <div class="clearfix">
+        <button
+          type="submit"
+          class="signup w-100 btn btn-lg btn-primary"
+          [disabled]="loginForm.invalid || inSubmission"
+        >
+          Login
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
