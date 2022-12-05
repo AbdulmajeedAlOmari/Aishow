@@ -6,8 +6,8 @@ import { AuthGuardService } from './services/auth-guard.service';
 import { UserService } from './services/user.service';
 import { UsersBoardComponent } from './users-board/users-board.component';
 
-const routes: Routes = [{
-  path:'register' ,component:RegisterComponent},
+const routes: Routes = [
+  {path:'register' ,component:RegisterComponent},
   {path:'login',component:LoginComponent},
   {path:'user', component:UsersBoardComponent, canActivate: [AuthGuardService]}
 ];

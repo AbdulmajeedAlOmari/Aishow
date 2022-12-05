@@ -13,12 +13,12 @@
     (ngSubmit)="login($event)"
   >
 
-  <app-alert *ngIf="showAlert" [color]="alertColor">
+  <app-alert class="med" *ngIf="showAlert" [color]="alertColor">
     {{alertMsg}}
   </app-alert>
   
     <div class="container">
-      <h1>Login</h1>
+      <h1 class="med">Login</h1>
       <hr />
       <div class="text-align">
       
@@ -36,7 +36,7 @@
         ></app-input>
       </div>
 
-      <p>
+      <p class="med">
         do not have an account 
         <a routerLink="/register" (click)="switchToRegisterModel('id02')">register</a>.
       </p>

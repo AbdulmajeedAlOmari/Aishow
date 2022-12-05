@@ -15,9 +15,10 @@ export class RegisterComponent implements OnInit {
   showAlert: boolean = false;
   alertMsg: string = '';
   alertColor: string = '';
-  isSuccessful = false;
-  isSignUpFailed = false;
+  isSignUpFailed: boolean = false;
   openLoginModel: boolean = false;
+  isSuccessful: boolean = false;
+  isLoggedIn: boolean = false;
 
   constructor(private auth: AuthService, private router: Router) {}
 
@@ -34,36 +35,46 @@ export class RegisterComponent implements OnInit {
   register(event: Event) {
     console.warn(this.registerForm.value);
     event.preventDefault();
-    console.log('ggg');
     this.auth.register(this.registerForm.value as IUser).subscribe(
       (data) => {
         console.log(data);
         this.inSubmission = true;
+        this.isSignUpFailed = false;
+        console.log('register successfully');
       },
 
       (err) => {
         this.showAlert = true;
         this.alertColor = 'danger';
-        this.alertMsg = 'something went wrong';
+        this.alertMsg = 'Something Went Wrong';
         this.inSubmission = false;
         this.isSignUpFailed = true;
         console.log(this.alertMsg);
       }
     );
-    this.inSubmission = true;
+    // this.inSubmission = true;
   }
 
   switchToLoginModel(elementId: string) {
-    (document.getElementById(elementId) as HTMLInputElement).style.display ='none';
-    (document.getElementById('id02') as HTMLInputElement).style.display ='block';
-    console.log('tt');
+    let element = document.getElementById('id02');
+    console.log(document.getElementById(elementId));
+    console.log(document.getElementById('id02'));
+
+    (document.getElementById(elementId) as HTMLInputElement).style.display =
+      'none';
+
+    if (element) {
+      (document.getElementById('id02') as HTMLInputElement).style.display =
+        'block';
+    }
+  }
+  closeModel(elementId: string) {
+    (document.getElementById(elementId) as HTMLInputElement).style.display =
+      'none';
   }
 
-  closeModel(elementId: string){
-    (document.getElementById(elementId) as HTMLInputElement).style.display='none'
-  }
-
-  openModel(elementId: string){
-    (document.getElementById(elementId) as HTMLInputElement).style.display='block'
+  openModel(elementId: string) {
+    (document.getElementById(elementId) as HTMLInputElement).style.display =
+      'block';
   }
 }

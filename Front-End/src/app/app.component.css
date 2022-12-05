@@ -9,6 +9,11 @@ body {
   .pricing-header {
     max-width: 700px;
   }
+
+  a {
+
+    cursor: pointer;
+  }
   
   
   .bd-placeholder-img {

@@ -26,4 +26,12 @@ export class AppComponent implements OnInit {
     window.location.reload();
     
   }
+
+  openModel(elementId: string){
+    if(document.getElementById(elementId)){
+      (document.getElementById(elementId) as HTMLInputElement).style.display='block'
+
+    }
+    // (document.getElementById(elementId) as HTMLInputElement).style.display='block'
+  }
 }
