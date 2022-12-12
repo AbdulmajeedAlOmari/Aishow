@@ -60,6 +60,7 @@ export class LoginComponent implements OnInit {
         //   this.isLoggedIn = true;
         this.inSubmission = true;
         console.log('login successfully');
+      //  this.route('/user')
 
         // this.roles = this.tokenStorage.getUser().roles;
           this.reloadPage();
